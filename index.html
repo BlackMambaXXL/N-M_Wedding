@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Никита и Милена · свадьба</title>
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Иконки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fae9e1;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            color: #4a3b33;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ========== АНИМИРОВАННЫЕ СЕРДЕЧКИ ========== */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;  /* сердечки не мешают нажимать на кнопки */
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.2rem;
+            color: #ffb0a0;
+            opacity: 0;
+            animation: floatHeart 6s ease-in forwards;
+            filter: drop-shadow(0 0 5px #ffd0c0);
+            text-shadow: 0 0 5px #fff5f0;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.9;
+                transform: translateY(50vh) rotate(180deg) scale(1.2);
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* мерцающие искорки */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffd9c5;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ffaa88, 0 0 20px #ffccbb;
+            animation: sparkleTwinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes sparkleTwinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* второй тип сердечек (падающие) */
+        .heart-rain {
+            position: absolute;
+            color: #ffb8a8;
+            font-size: 1rem;
+            animation: rainHeart 4s linear infinite;
+            filter: drop-shadow(0 0 3px #ffaa88);
+        }
+
+        @keyframes rainHeart {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .page {
+            max-width: 480px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            background: rgba(255, 245, 238, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 30px 50px -20px #996b56, 0 0 0 1px rgba(255, 245, 240, 0.6) inset;
+            border: 1px solid #ffffff88;
+            animation: fadeRise 0.8s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeRise {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .wedding-announce {
+            text-align: center;
+            margin: 0 0 1.8rem 0;
+            padding: 1.5rem 1rem;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 60px;
+            border: 2px solid #fad9cb;
+            box-shadow: 0 15px 25px -12px #cb9e8a;
+        }
+
+        .announce-icon {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 0.2rem;
+            filter: drop-shadow(0 4px 6px #ecc2b0);
+            animation: softPulse 2.5s infinite;
+        }
+
+        @keyframes softPulse {
+            0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); }
+        }
+
+        .wedding-announce h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #7e5a48;
+            letter-spacing: 1px;
+        }
+
+        .wedding-announce p {
+            font-size: 1.2rem;
+            color: #9e715d;
+            font-style: italic;
+            background: #fceede90;
+            display: inline-block;
+            padding: 0.2rem 1.8rem;
+            border-radius: 40px;
+            margin-top: 0.3rem;
+        }
+
+        .announce-decoration {
+            display: flex;
+            justify-content: center;
+            gap: 0.7rem;
+            margin-top: 0.8rem;
+        }
+
+        .announce-decoration span {
+            width: 8px;
+            height: 8px;
+            background: #cfa392;
+            border-radius: 50%;
+        }
+        .announce-decoration span:nth-child(2) { background: #b27a64; width: 14px; height: 14px; }
+
+        .names {
+            text-align: center;
+            margin: 1rem 0 2rem;
+        }
+
+        .names h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.8rem, 12vw, 4.2rem);
+            font-weight: 700;
+            color: #6d4c3d;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+
+        .ampersand {
+            font-size: 3.8rem;
+            color: #bc8b75;
+            margin: 0 0.3rem;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .photo-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.2rem 0 0.8rem;
+        }
+
+        .couple-photo {
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            border: 6px solid white;
+            box-shadow: 0 25px 35px -15px #a87661;
+            overflow: hidden;
+            background: #e7cfc0;
+            transition: transform 0.3s ease;
+        }
+
+        .couple-photo:hover {
+            transform: scale(1.02);
+        }
+
+        .couple-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-hint {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #a17764;
+            background: #f6dfd2b0;
+            backdrop-filter: blur(2px);
+            padding: 0.2rem 1.5rem;
+            border-radius: 40px;
+            width: fit-content;
+            margin: 0.3rem auto 1.8rem;
+            border: 1px solid #eecfbf;
+        }
+
+        .calendar-section {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0 2rem;
+        }
+
+        .calendar-grid {
+            background: #fdf6f2f2;
+            backdrop-filter: blur(2px);
+            border-radius: 44px;
+            padding: 1.5rem 1rem 1.5rem;
+            box-shadow: 0 25px 30px -15px #ba8d78, 0 3px 0 0 #fadacb inset;
+            border: 1px solid #f5cdbb;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .month-header {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #6f4b3a;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #f0cdbb;
+            padding-bottom: 0.3rem;
+        }
+
+        .month-header span {
+            font-size: 1.5rem;
+            color: #ab7c65;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            color: #8a6251;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            gap: 3px;
+        }
+
+        .weekdays div {
+            background: #f1d9ce;
+            padding: 0.5rem 0;
+            border-radius: 25px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+
+        .day-cell {
+            padding: 0.7rem 0.1rem;
+            background: #fffaf5;
+            border-radius: 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #4b3c34;
+            border: 1px solid #fad0bf;
+            box-shadow: 0 2px 4px #f6cfbf;
+        }
+
+        .day-cell.empty {
+            background: #f3e4db60;
+            border: 1px dashed #dfbbaa;
+            color: #ab8c7c;
+            box-shadow: none;
+        }
+
+        .day-cell.highlight {
+            background: #d8aa95;
+            color: white;
+            font-weight: 700;
+            border: 2px solid #ac5e45;
+            box-shadow: 0 6px 10px #d68d72;
+            position: relative;
+        }
+
+        .day-cell.highlight::after {
+            content: "❤️";
+            position: absolute;
+            font-size: 0.8rem;
+            bottom: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 2px 2px #cb9e8a);
+        }
+
+        .details-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin: 2rem 0 2rem;
+        }
+
+        .detail-card {
+            background: rgba(255, 250, 247, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 1.8rem 1.8rem;
+            border: 1px solid #fad9ca;
+            box-shadow: 0 12px 22px -12px #b48772;
+        }
+
+        .detail-card i {
+            font-size: 2rem;
+            color: #b27a64;
+            width: 2.5rem;
+        }
+
+        .detail-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #7e5542;
+            border-bottom: 2px solid #f0cab9;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+
+        .address {
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin: 0.5rem 0;
+            word-break: break-word;
+        }
+
+        .time {
+            background: #edd0c0;
+            border-radius: 40px;
+            padding: 0.4rem 1.8rem;
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0.3rem 0;
+        }
+
+        .time-note {
+            font-size: 0.95rem;
+            color: #b15f47;
+            background: #fff6ef;
+            border-radius: 30px;
+            padding: 0.2rem 1.2rem;
+            display: inline-block;
+            margin-top: 0.2rem;
+            font-style: italic;
+        }
+
+        .poll-wrapper {
+            text-align: center;
+            margin: 2.5rem 0 2rem;
+        }
+
+        .poll-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #c3917b;
+            color: white;
+            font-size: 1.6rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            padding: 1rem 2.2rem;
+            border-radius: 60px;
+            text-decoration: none;
+            box-shadow: 0 10px 0 #7b5442, 0 16px 28px -10px #ac7861;
+            transition: all 0.08s linear;
+            border: 2px solid #fde0d3;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .poll-btn i {
+            font-size: 1.5rem;
+        }
+
+        .poll-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 5px 0 #7b5442, 0 16px 28px -10px #ac7861;
+        }
+
+        .poll-note {
+            margin-top: 0.8rem;
+            background: #ffefe7;
+            padding: 0.3rem 1.5rem;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 1rem;
+        }
+
+        .bottom-charm {
+            background: rgba(255, 250, 245, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 56px;
+            padding: 2rem 1.5rem;
+            margin: 2.5rem 0 0;
+            border: 2px solid #f4cfbc;
+            box-shadow: 0 20px 30px -15px #b3846e;
+        }
+
+        .small-photo {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            aspect-ratio: 16 / 10;
+            border-radius: 24px;
+            margin: 0 auto 1.5rem;
+            border: 5px solid white;
+            box-shadow: 0 18px 28px -12px #996f5d;
+            overflow: hidden;
+            background: #ddc1b2;
+        }
+
+        .small-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cute-block {
+            background: #fbe1d3;
+            border-radius: 40px;
+            padding: 1.5rem 1.2rem;
+            font-size: 1.1rem;
+            color: #4f3c33;
+            border: 2px solid #f2bc9e;
+            box-shadow: 0 8px 0 #c49a83;
+            margin: 1.5rem 0;
+        }
+
+        .signature {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            color: #8c5f4b;
+            margin-top: 1.2rem;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 380px) {
+            .page { padding: 1.5rem 1rem; }
+            .names h1 { font-size: 2.5rem; }
+            .ampersand { font-size: 3rem; }
+            .day-cell { font-size: 0.9rem; padding: 0.5rem 0; }
+            .poll-btn { font-size: 1.4rem; padding: 0.9rem 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ========== КОНТЕЙНЕР С АНИМИРОВАННЫМИ СЕРДЕЧКАМИ ========== -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <div class="page">
+        <!-- ШАПКА С ОБЪЯВЛЕНИЕМ -->
+        <div class="wedding-announce">
+            <span class="announce-icon">💍</span>
+            <h2>С радостью объявляем</h2>
+            <p>о создании нашей семьи</p>
+            <div class="announce-decoration">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <!-- ИМЕНА -->
+        <div class="names">
+            <h1>
+                <span>Никита</span>
+                <span class="ampersand">&</span>
+                <span>Милена</span>
+            </h1>
+        </div>
+
+        <!-- ФОТО 1 -->
+        <div class="photo-container">
+            <div class="couple-photo">
+                <img src="https://imgfy.ru/ib/peFQvlqSD5EnoWb_1772916500.webp" alt="Никита и Милена">
+            </div>
+        </div>
+        <div class="photo-hint">
+            <i class="fa-regular fa-heart"></i> день предложения 31.01.26
+        </div>
+
+        <!-- КАЛЕНДАРЬ -->
+        <div class="calendar-section">
+            <div class="calendar-grid">
+                <div class="month-header">
+                    Июль <span>2026</span>
+                </div>
+                <div class="weekdays">
+                    <div>пн</div><div>вт</div><div>ср</div><div>чт</div><div>пт</div><div>сб</div><div>вс</div>
+                </div>
+                <div class="days-grid">
+                    <div class="day-cell empty"></div><div class="day-cell empty"></div>
+                    <div class="day-cell">1</div><div class="day-cell">2</div><div class="day-cell">3</div><div class="day-cell">4</div><div class="day-cell">5</div>
+                    <div class="day-cell">6</div><div class="day-cell">7</div><div class="day-cell">8</div><div class="day-cell">9</div><div class="day-cell">10</div>
+                    <div class="day-cell">11</div><div class="day-cell">12</div><div class="day-cell">13</div><div class="day-cell">14</div><div class="day-cell">15</div>
+                    <div class="day-cell">16</div>
+                    <div class="day-cell highlight">17</div>
+                    <div class="day-cell">18</div><div class="day-cell">19</div><div class="day-cell">20</div><div class="day-cell">21</div><div class="day-cell">22</div>
+                    <div class="day-cell">23</div><div class="day-cell">24</div><div class="day-cell">25</div><div class="day-cell">26</div><div class="day-cell">27</div>
+                    <div class="day-cell">28</div><div class="day-cell">29</div><div class="day-cell">30</div><div class="day-cell">31</div>
+                    <div class="day-cell empty"></div><div class="day-cell empty"></div><div class="day-cell empty"></div><div class="day-cell empty"></div>
+                </div>
+                <div style="text-align: center; margin-top: 1rem; font-size: 1.1rem; color:#a1624b; font-weight: 500;">
+                    <i class="fa-regular fa-calendar-check"></i> 17.07.2026
+                </div>
+            </div>
+        </div>
+
+        <!-- АДРЕСА -->
+        <div class="details-grid">
+            <div class="detail-card">
+                <i class="fas fa-church"></i>
+                <div class="detail-title">Церемония</div>
+                <div class="address">📍 ЗАГС, Чулман, 73</div>
+                <div class="time">🕐 14:00</div>
+                <div class="time-note">приходите чуть раньше</div>
+            </div>
+            <div class="detail-card">
+                <i class="fas fa-utensils"></i>
+                <div class="detail-title">Банкет</div>
+                <div class="address">📍 ул. Абдуллы Курбанова, 1а</div>
+                <div class="address">ресторан «Карабах»</div>
+                <div class="time">🕐 16:30</div>
+                <div class="time-note">Этот вечер всем запомнится!!!</div>
+            </div>
+        </div>
+
+        <!-- КНОПКА ОПРОСА -->
+        <div class="poll-wrapper">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeACPo6i1ngQxztSnbkwZ3F7s_eIeZOfiktqjfwaDNURjZRpg/viewform?usp=header" target="_blank" class="poll-btn">
+                <i class="fas fa-check-circle"></i> Пройдите опрос
+            </a>
+            <div class="poll-note">
+                🌸 Это важно для нас
+            </div>
+        </div>
+
+        <!-- НИЖНИЙ БЛОК -->
+        <div class="bottom-charm">
+            <div class="small-photo">
+                <img src="https://imgfy.ru/ib/ulD27OBHm927GCn_1772916593.webp" alt="Никита и Милена">
+            </div>
+
+            <div class="cute-block">
+                <span style="font-size:2rem;">✨</span> Самый счастливый день в нашей жизни уже совсем близко, и мы очень хотим, чтобы вы были рядом. Для нас нет ничего важнее, чем разделить этот праздник с самыми близкими людьми. <span style="font-size:2rem;">✨</span>
+            </div>
+
+            <div class="signature">
+                До встречи, <br> С любовью, ваши Никита и Милена
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== СКРИПТ ДЛЯ СОЗДАНИЯ СЕРДЕЧЕК ========== -->
+    <script>
+        // Функция для создания летающих сердечек
+        function createHeart() {
+            const container = document.getElementById('heartsContainer');
+            const heart = document.createElement('div');
+            
+            // Случайный выбор символа (разные вариации сердечек)
+            const hearts = ['❤️', '🧡', '💛', '💚', '💙', '💜', '🤍', '💖', '💗', '💓', '💕', '💞'];
+            const randomHeart = hearts[Math.floor(Math.random() * hearts.length)];
+            
+            heart.className = 'heart';
+            heart.innerHTML = randomHeart;
+            
+            // Случайная позиция по горизонтали
+            heart.style.left = Math.random() * 100 + '%';
+            
+            // Случайный размер
+            const size = 0.8 + Math.random() * 1.5;
+            heart.style.fontSize = size + 'rem';
+            
+            // Случайная длительность анимации
+            const duration = 4 + Math.random() * 6;
+            heart.style.animation = `floatHeart ${duration}s ease-in forwards`;
+            
+            // Случайная задержка
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            
+            container.appendChild(heart);
+            
+            // Удаляем сердечко после окончания анимации
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000 + 2000);
+        }
+
+        // Создаем сердечки каждые 300ms
+        setInterval(createHeart, 300);
+
+        // Дополнительные падающие сердечки (для разнообразия)
+        function createRainHeart() {
+            const container = document.getElementById('heartsContainer');
+            const heart = document.createElement('div');
+            
+            const hearts = ['❤️', '💖', '💝', '💘', '💕'];
+            heart.className = 'heart-rain';
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (0.6 + Math.random() * 1.2) + 'rem';
+            heart.style.animationDuration = (3 + Math.random() * 4) + 's';
+            heart.style.animationDelay = Math.random() * 3 + 's';
+            
+            container.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+
+        // Создаем падающие сердечки реже
+        setInterval(createRainHeart, 800);
+
+        // Создаем мерцающие искорки
+        function createSparkle() {
+            const container = document.getElementById('heartsContainer');
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            sparkle.style.animationDuration = (1 + Math.random() * 2) + 's';
+            
+            container.appendChild(sparkle);
+            
+            setTimeout(() => {
+                sparkle.remove();
+            }, 3000);
+        }
+
+        // Создаем искорки каждые 200ms
+        setInterval(createSparkle, 200);
+
+        // При загрузке страницы создаем много сердечек сразу
+        window.addEventListener('load', () => {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createHeart();
+                    createRainHeart();
+                }, i * 100);
+            }
+        });
+    </script>
+</body>
+</html>
